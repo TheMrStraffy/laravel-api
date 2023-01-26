@@ -11,28 +11,13 @@
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/js/appVue.js','resources/scss/appVue.scss'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
 
         @include('admin.partials.header')
         <main class="d-flex row w-100">
-            <div class="aside-menu col-1 bg-dark">
-                <ul>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('login') }}">{{ __('Login') }}</a>
-                    </li>
-                    @if (Route::has('register'))
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('register') }}">{{ __('Register') }}</a>
-                    </li>
-                    @endif
-                </ul>
-            </div>
-            <div class="container col-11 p-5">
-
-                @yield('content')
-            </div>
+            <div id="app"></div>
         </main>
 
     </body>
