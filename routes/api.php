@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::get('movies', function(){
     $isOut = true;
-    $movie = [
+    $movies = [
         "title"=>"Tenet",
         "poster"=>"https://pad.mymovies.it/filmclub/2019/10/296/locandina.jpg",
         "running_time"=>150,
@@ -37,7 +37,7 @@ Route::get('movies', function(){
         ],
         ];
 
-        return response()->json(compact('movie','isOut'));
+        return response()->json(compact('movies','isOut'));
 });
 Route::namespace('Api')
     ->prefix('posts')
