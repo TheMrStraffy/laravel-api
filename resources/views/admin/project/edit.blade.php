@@ -3,6 +3,19 @@
 @section('content')
 
     <div class="container">
+
+        <div>
+            <ul>
+
+                @if ($errors->any())
+                    @foreach ($errors as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+                @endif
+            </ul>
+
+        </div>
+
         <form class="mb-2" action="{{route('admin.project.update', $project)}}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -15,6 +28,33 @@
           <div class="mb-3">
             <label for="client_name" class="form-label">Client Name</label>
             <input type="text" class="form-control" id="client_name" name="client_name" value="{{old('client_name', $project->client_name)}}">
+          </div>
+
+          <div class="mb-3">
+            <select class="form-control" name="type_id" id="type_id">
+                <option value="">Choose Type</option>
+                @foreach ($types as $type)
+                    <option
+                    @if ($type->id == old('type_id', $project->type?->id))  selected  @endif
+                    value="{{$type->id}}">{{$type->name}}</option>
+                @endforeach
+            </select>
+          </div>
+
+          <div class="mb-3 row">
+            @foreach ($technologies as $technology)
+            <div class="col-12 col-lg-2">
+
+                <input type="checkbox" name="technologies[]" id="technology{{$loop->iteration}}" value="{{$technology->id}}"
+                @if (!$errors->all() && $project->technologies->contains($technology))
+                checked
+                @elseif($errors->all() && in_array($technology->id,old('technologies',[])))
+                checked
+                @endif
+                >
+                <label for="technology{{$loop->iteration}}">{{$technology->name}}</label>
+            </div>
+            @endforeach
           </div>
 
           <div class="mb-3">

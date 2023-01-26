@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Pagination\Paginator;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
-use App\Http\Requests\StoreProjectRequest;
-use App\Http\Requests\UpdateProjectRequest;
+use App\Http\Requests\ProjectRequest;
+use App\Models\Technology;
+use App\Models\Type;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -18,21 +19,28 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
+        $technologies = Technology::all();
         if(isset($_GET['search'])){
             $search = $_GET['search'];
             $projects = Project::where('name','like', "%$search%")->paginate(10);
         } else{
 
-            $projects = Project::orderBy('id','desc')->paginate(10);
+            $projects = Project::all()->paginate(10);
         }
-        return view('admin.project.index',compact('projects'));
+        return view('admin.project.index',compact('projects','technologies'));
     }
-    public function orderby(){
-        $direction= 'desc' ? 'asc' : 'desc';
+    public function orderby($column,$direction){
 
+
+        $direction = $direction === 'desc' ? 'asc' : 'desc';
+        $projects = Project::orderBy($column, $direction)->paginate(10);
+
+        return view('admin.project.index', compact('projects','direction'));
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -40,16 +48,18 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.project.create');
+        $technologies = Technology::all();
+        $types = Type::all();
+        return view('admin.project.create', compact('types','technologies'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreProjectRequest  $request
+     * @param  \App\Http\Requests\ProjectRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProjectRequest $request)
+    public function store(ProjectRequest $request)
     {
         $form_data = $request->all();
 
@@ -64,6 +74,11 @@ class ProjectController extends Controller
         // dd($new_project);
         $new_project->fill($form_data);
         $new_project->save();
+
+        if(array_key_exists('technologies', $form_data)){
+            $new_project->technologies()->attach($form_data['technologies']);
+        };
+
         return redirect()->route('admin.project.show', $new_project);
     }
 
@@ -86,18 +101,21 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.project.edit', compact('project'));
+        $technologies = Technology::all();
+        $types = Type::all();
+        return view('admin.project.edit', compact('project','types','technologies'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateProjectRequest  $request
+     * @param  \App\Http\Requests\ProjectRequest  $request
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProjectRequest $request, Project $project)
+    public function update(ProjectRequest $request, Project $project)
     {
+        $technologies = Technology::all();
         $form_data = $request->all();
         if(array_key_exists('cover_image', $form_data)){
             if($project->cover_image){
@@ -113,6 +131,13 @@ class ProjectController extends Controller
             $form_data['slug'] = $project->slug;
         }
         $project->update($form_data);
+
+        if(array_key_exists('technologies', $form_data)){
+            $project->technologies()->sync($form_data['technologies']);
+        } else {
+            $project->technologies()->sync([]);
+        }
+
         return redirect()->route('admin.project.show', $project);
     }
 
