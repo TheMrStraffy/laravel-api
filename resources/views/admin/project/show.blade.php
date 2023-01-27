@@ -20,7 +20,7 @@
           <p class="card-title">{{$project->client_name}}</p>
           <p class="card-title">{{$project->type?->name}}</p>
           <p class="card-text ">{{$project->summary}}</p>
-          <a href="{{route('admin.project.index')}}" class="btn btn-primary mb-2">Go To Projects</a>
+          <a href="{{url()->previous()}}" class="btn btn-primary mb-2">Go back</a>
           <a href="{{route('admin.project.edit', $project)}}" class="btn btn-warning me-2">
             <i class="fa-solid fa-pen-to-square"></i>
         </a>
