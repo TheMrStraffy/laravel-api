@@ -3,12 +3,14 @@
 import axios from 'axios';
 
 import ProjectCardVue from './components/ProjectCard.vue';
-import AsideVue from './partials/Aside.vue';
+import SideMenu from './partials/SideMenu.vue'
+import Home from './pages/Home.vue';
 
 export default {
   name:'App',
   components:{
-    AsideVue
+    SideMenu,
+    Home
     // ProjectCardVue,
   },
   data(){
@@ -38,12 +40,12 @@ export default {
 <template>
 <main class="d-flex">
 
-  <aside-vue class="aside col-2" />
+    <div class="side-menu col-2 d-flex align-items-center justify-content-center">
+  <side-menu  />
+    </div>
   <div class="container">
 
-    <div class="row mx-auto">
-    <!-- <project-card-vue :projectList="this.projects" /> -->
-    </div>
+    <router-view> </router-view>
   </div>
 </main>
 </template>
@@ -51,7 +53,7 @@ export default {
 
 <style lang="scss" scoped>
 @use '../scss/appVue.scss';
-.aside{
+.side-menu{
     height: 100%;
     background-color: #212529;
 }
