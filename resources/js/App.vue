@@ -19,12 +19,8 @@ export default {
     getApi(){
       axios.get(this.baseUrl + 'posts')
       .then(result =>{
-        this.projects = result.data.projects;
-        this.technologies = result.data.technologies;
-        this.types = result.data.types;
+        this.projects = result.data.projects.data;
         console.log(this.projects);
-        console.log(this.technologies);
-        console.log(this.types);
       })
     }
   },
@@ -41,7 +37,7 @@ export default {
 
   <div class="row mx-auto">
 
-  <project-card-vue :projectList="this.projects" :technologyList="this.technologies" :typeList="this.types" />
+  <project-card-vue :projectList="this.projects" />
   </div>
   </div>
 </template>

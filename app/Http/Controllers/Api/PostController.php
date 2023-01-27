@@ -11,10 +11,9 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     public function index(){
-        $projects = Project::all();
-        $technologies = Technology::all();
-        $types = Type::all();
-        return response()->json(compact('projects','technologies','types'));
+        $projects = Project::with(['type','technologies'])->orderBy('id','desc')->paginate(10);
+        return response()->json(compact('projects'));
     }
 
 }
+//Project::with(['tags','category','user']->orderBy('id','desc')->paginate(10))

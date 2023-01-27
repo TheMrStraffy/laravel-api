@@ -28,14 +28,14 @@ class ProjectController extends Controller
             $projects = Project::where('name','like', "%$search%")->paginate(10);
         } else{
 
-            $projects = Project::all()->paginate(10);
+            $projects = Project::paginate(10);
         }
         return view('admin.project.index',compact('projects','technologies'));
     }
     public function orderby($column,$direction){
 
 
-        $direction = $direction === 'desc' ? 'asc' : 'desc';
+        $direction = 'desc' ? 'desc' : 'asc';
         $projects = Project::orderBy($column, $direction)->paginate(10);
 
         return view('admin.project.index', compact('projects','direction'));
