@@ -1,11 +1,15 @@
 <script>
 
 import axios from 'axios';
+
 import ProjectCardVue from './components/ProjectCard.vue';
+import AsideVue from './partials/Aside.vue';
+
 export default {
   name:'App',
   components:{
-    ProjectCardVue,
+    AsideVue
+    // ProjectCardVue,
   },
   data(){
     return {
@@ -32,17 +36,23 @@ export default {
 
 
 <template>
-  <h1>Main App Here</h1>
+<main class="d-flex">
+
+  <aside-vue class="aside col-2" />
   <div class="container">
 
-  <div class="row mx-auto">
-
-  <project-card-vue :projectList="this.projects" />
+    <div class="row mx-auto">
+    <!-- <project-card-vue :projectList="this.projects" /> -->
+    </div>
   </div>
-  </div>
+</main>
 </template>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use '../scss/appVue.scss';
+.aside{
+    height: 100%;
+    background-color: #212529;
+}
 </style>

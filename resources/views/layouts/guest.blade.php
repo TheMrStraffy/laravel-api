@@ -18,7 +18,7 @@
     <body class="font-sans text-gray-900 antialiased">
 
         @include('admin.partials.header')
-        <main class="d-flex row w-100">
+        <main class="w-100">
             <div id="app"></div>
         </main>
 

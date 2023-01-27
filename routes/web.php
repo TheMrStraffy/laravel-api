@@ -43,3 +43,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('{any?}', function(){
+    return view('guest.home'); //dove vue ha il div id="app"
+})->where('any','.*')->name('home');
