@@ -4,11 +4,12 @@ import {BASE_URL} from '../data/data';
 import {store} from '../data/store';
 
 import ProjectCard from '../components/ProjectCard.vue';
+import FormSearchVue from '../components/FormSearch.vue';
 
 
 export default {
     name:'blog',
-    components: { ProjectCard },
+    components: { ProjectCard, FormSearchVue },
     data(){
         return {
             BASE_URL,
@@ -32,13 +33,17 @@ export default {
     }
 </script>
 
-    <template>
-      <h1>Blog</h1>
-      <div class="row justify-content-around">
+<template>
+<div class="headerBlog d-flex justify-content-around align-items-center">
+<h1>Blog</h1>
+<form-search-vue />
 
-  <project-card :projectList="store.projects" />
 </div>
-    </template>
+<div class="row justify-content-around w-100">
+
+    <project-card :projectList="store.projects" />
+</div>
+</template>
 
 <style>
 

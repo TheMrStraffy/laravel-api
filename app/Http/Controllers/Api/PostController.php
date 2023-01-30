@@ -17,7 +17,17 @@ class PostController extends Controller
 
     public function show($slug){
         $project = Project::where('slug',$slug)->with(['type','technologies'])->first();
+
+
         return response()->json($project);
+    }
+
+    public function search(){
+        $searchInput = $_GET['searchInput'];
+
+        $projects = Project::where('name','like',"%$searchInput%")->with(['type','technologies'])->get();
+
+        return response()->json($projects);
     }
 
 }
