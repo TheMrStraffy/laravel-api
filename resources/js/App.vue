@@ -1,7 +1,4 @@
 <script>
-
-import axios from 'axios';
-
 import SideMenu from './partials/SideMenu.vue'
 
 export default {

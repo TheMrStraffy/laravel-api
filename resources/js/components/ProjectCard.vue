@@ -2,7 +2,7 @@
 export default {
   name: "ProjectCard",
   props:{
-    projectList: Array,
+    projectList: Object,
     },
   data(){
     return {
@@ -29,7 +29,7 @@ export default {
     >
       <span class="text-white bg-dark">{{technology.name}}</span>
     </div>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <router-link :to="{name: 'detail', params:{slug: project.slug} }">Post Detail</router-link>
   </div>
 </div>
 
