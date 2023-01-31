@@ -3,6 +3,13 @@
 @section('content')
 <div class="container p-5">
 
+    @if (session('message'))
+    <div class="alert alert-success" role="alert">
+        {{session('message')}}
+    </div>
+
+    @endif
+
     <div class="card mb-3 mx-auto" style="width: 18rem;">
         @if (!$project['image_original_name'])
         <img src="{{$project->cover_image= asset($project->cover_image)}}" class="card-img-top" alt="{{$project->name}}">
@@ -17,6 +24,8 @@
 
             @endforeach
           </p>
+
+          <p>From user: {{Auth::user()->name}}</p>
           <p class="card-title">{{$project->client_name}}</p>
           <p class="card-title">{{$project->type?->name}}</p>
           <p class="card-text ">{{$project->summary}}</p>

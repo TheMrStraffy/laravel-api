@@ -22,21 +22,22 @@ class ProjectController extends Controller
 
     public function index()
     {
-        $technologies = Technology::all();
         if(isset($_GET['search'])){
             $search = $_GET['search'];
-            $projects = Project::where('name','like', "%$search%")->paginate(10);
+            $projects = Project::where('user_id', Auth::id())
+                ->where('title','like',"%$search%")
+                ->paginate(10);
         } else{
-
-            $projects = Project::paginate(10);
+            $projects= Project::where('user_id',Auth::id())->orderby('id','desc')->paginate(10);
         }
-        return view('admin.project.index',compact('projects','technologies'));
+        $direction = 'asc';
+        return view('admin.project.index',compact('projects','direction'));
     }
     public function orderby($column,$direction){
 
 
-        $direction = 'desc' ? 'desc' : 'asc';
         $projects = Project::orderBy($column, $direction)->paginate(10);
+        $direction = $direction === 'desc' ? 'desc' : 'asc';
 
         return view('admin.project.index', compact('projects','direction'));
     }
@@ -70,6 +71,7 @@ class ProjectController extends Controller
 
         $new_project = new Project();
         $form_data['slug'] = Project::slugGenerator($form_data['name']);
+        $form_data['user_id'] = Auth::id();
 
         // dd($new_project);
         $new_project->fill($form_data);
@@ -79,7 +81,7 @@ class ProjectController extends Controller
             $new_project->technologies()->attach($form_data['technologies']);
         };
 
-        return redirect()->route('admin.project.show', $new_project);
+        return redirect()->route('admin.project.show', $new_project)->with('message','The post has been created correctly.');
     }
 
     /**
@@ -90,7 +92,11 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return view('admin.project.show', compact('project'));
+        if($project->user_id === Auth::id()){
+            return view('admin.project.show', compact('project'));
+        }
+
+        return redirect()->route('admin.project.index');
     }
 
     /**
@@ -101,8 +107,12 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        if($project->user_id != Auth::id()){
+            return redirect()->route('admin.post.index');
+        }
         $technologies = Technology::all();
         $types = Type::all();
+
         return view('admin.project.edit', compact('project','types','technologies'));
     }
 
@@ -135,10 +145,10 @@ class ProjectController extends Controller
         if(array_key_exists('technologies', $form_data)){
             $project->technologies()->sync($form_data['technologies']);
         } else {
-            $project->technologies()->sync([]);
+            $project->technologies()->detach();
         }
 
-        return redirect()->route('admin.project.show', $project);
+        return redirect()->route('admin.project.show', $project)->with('message','The post has been updated correctly.');
     }
 
     /**
@@ -153,6 +163,6 @@ class ProjectController extends Controller
             Storage::disk('public')->delete($project->cover_image);
         }
         $project->delete();
-        return redirect()->route('admin.project.index');
+        return redirect()->route('admin.project.index')->with('deleted','The post has been deleted correctly.');
     }
 }

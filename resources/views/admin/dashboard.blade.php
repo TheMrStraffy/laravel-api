@@ -8,7 +8,7 @@
         <h2 class="display-7 fw-bold">
             Hello {{Auth::user()->name}}!
         </h2>
-        <p>Welcome to your Admin Page</p>
+        <p>Welcome to The New Projects</p>
 
         <a href="{{route('admin.project.index')}}">Lists of Projects</a>
 

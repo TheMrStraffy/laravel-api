@@ -24,12 +24,10 @@
                 <ul class="navbar-nav me-auto">
                     @if (Auth::check())
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{{url('/admin') }}">{{ __('Home') }}</a>
+                        <a class="nav-link text-white" href="{{route('admin.dashboard')}}">Home</a>
                     </li>
                         @else
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{{url('/') }}">{{ __('Home') }}</a>
-                        </li>
+
                     @endif
 
                 </ul>
@@ -37,7 +35,7 @@
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     {{-- Search Bar --}}
-                    @if(Route::currentRouteName() === 'admin.project.index')
+                    @if(Auth::check())
                     <li class="my-auto">
                         <form  action="{{route('admin.project.index')}}" method="GET">
                         <input type="text" name="search" id="search" class="rounded-3" placeholder="search">

@@ -50,7 +50,7 @@
           </td>
         </tr>
         @empty
-
+        <h2>No results were found</h2>
         @endforelse
     </tbody>
   </table>

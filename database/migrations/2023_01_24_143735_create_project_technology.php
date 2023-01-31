@@ -19,13 +19,13 @@ return new class extends Migration
             $table->foreign('project_id')
             ->references('id')
             ->on('projects')
-            ->cascadeOnDelete;
+            ->cascadeOnDelete();
 
             $table->unsignedBigInteger('technology_id');
             $table->foreign('technology_id')
             ->references('id')
             ->on('technologies')
-            ->cascadeOnDelete;
+            ->cascadeOnDelete();
             $table->timestamps();
         });
     }
