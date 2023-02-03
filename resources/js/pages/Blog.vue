@@ -5,11 +5,12 @@ import {store} from '../data/store';
 
 import ProjectCard from '../components/ProjectCard.vue';
 import FormSearchVue from '../components/FormSearch.vue';
+import TechnologyTypeVue from '../components/TechnologyType.vue';
 
 
 export default {
     name:'blog',
-    components: { ProjectCard, FormSearchVue },
+    components: { ProjectCard, FormSearchVue, TechnologyTypeVue },
     data(){
         return {
             BASE_URL,
@@ -23,7 +24,11 @@ export default {
       axios.get(url)
       .then(result =>{
         store.projects = result.data.projects.data;
+        store.types = result.data.types;
+        store.technologies = result.data.technologies;
         console.log(store.projects);
+        // console.log(store.types);
+        // console.log(store.technologies);
       })
     }
   },
@@ -34,14 +39,18 @@ export default {
 </script>
 
 <template>
-<div class="headerBlog d-flex justify-content-around align-items-center">
-<h1>Blog</h1>
-<form-search-vue />
+<div class="headerBlog justify-content-around align-items-center mb-4">
+    <h1>Blog</h1>
+    <div class="d-flex justify-content-around align-items-center">
 
+    <form-search-vue class="col-2" />
+    <technology-type-vue @getApi="getApi(this.active_base_url)" class="col-6" />
+
+    </div>
 </div>
 <div class="row justify-content-around w-100">
 
-    <project-card :projectList="store.projects" />
+    <project-card v-for="project in store.projects" :key="'project'+project.id" :project="project" />
 </div>
 </template>
 

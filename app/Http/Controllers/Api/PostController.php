@@ -12,7 +12,9 @@ class PostController extends Controller
 {
     public function index(){
         $projects = Project::with(['type','technologies'])->orderBy('id','desc')->paginate(10);
-        return response()->json(compact('projects'));
+        $technologies = Technology::all();
+        $types = Type::all();
+        return response()->json(compact('projects','technologies','types'));
     }
 
     public function show($slug){
@@ -28,6 +30,21 @@ class PostController extends Controller
         $projects = Project::where('name','like',"%$searchInput%")->with(['type','technologies'])->get();
 
         return response()->json($projects);
+    }
+
+    public function searchByType(){
+        $getTypeId = $_GET['type_id'];
+        $projects = Project::where('type_id', $getTypeId)->with(['technologies','user','type'])->get();
+        return response()->json(compact('projects'));
+    }
+
+    public function searchByTechnology($id){
+        $list_projects = [];
+        $type = Type::where('id',$id)->with(['projects'])->first();
+        foreach($type->projects as $project){
+            $list_projects[] = Project::where('id',$type->id)->with(['technologies','user','types'])->first();
+        }
+        return response()->json($list_projects);
     }
 
 }

@@ -2,7 +2,7 @@
 export default {
   name: "ProjectCard",
   props:{
-    projectList: Object,
+    project: Object,
     },
   data(){
     return {
@@ -12,12 +12,14 @@ export default {
 }
 </script>
 <template>
-  <div
-  v-for="project in projectList" :key="project.id"
-  class="mc-card me-4 mb-4 col-3">
+  <div class="mc-card me-4 mb-4 col-3">
   <img class="card-img-top" :src="project.cover_image" :alt="project.name">
-    <h5 class="card-title">{{project.name}}</h5>
-    <div class="text-danger">
+    <h5 class="card-title">
+        <router-link :to="{name: 'detail', params:{slug: project.slug} }">{{project.name}}</router-link>
+
+    </h5>
+
+    <div v-if="project.type" class="text-danger">
     <span>
       {{project.type.name}}
       </span>
@@ -25,11 +27,11 @@ export default {
   <div class="card-body d-flex justify-content-around align-content-center">
 
     <div
-    v-for="technology in project.technologies" :key="technology.id"
+    v-for="technology in project.technologies" :key="'technology'+technology.id"
     >
       <span class="text-white bg-dark">{{technology.name}}</span>
     </div>
-    <router-link :to="{name: 'detail', params:{slug: project.slug} }">Post Detail</router-link>
+
   </div>
 </div>
 
